@@ -1,33 +1,29 @@
-import "dotenv/config"; // needed in every file we need env variables
-import { relationship, text } from "@keystone-6/core/fields";
+import { relationship, text, image } from "@keystone-6/core/fields";
 import { list } from "@keystone-6/core";
 
 import { cloudinaryImage } from "@keystone-6/cloudinary";
 
-import { isSignedIn, permissions } from "../access";
-
 // cloudinary integration
 export const cloudinary = {
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-  apiKey: process.env.CLOUDINARY_KEY,
-  apiSecret: process.env.CLOUDINARY_SECRET,
+  cloudName: "dfpkdo5tf",
+  apiKey: "954846955722679",
+  apiSecret: "7ljL_MDCJUjdzglITE3V9buwoso",
   folder: "sickfits",
 };
+
+console.log(cloudinary);
 
 export const ProductImage = list({
   access: {
     operation: {
-      create: isSignedIn,
+      create: () => true,
       query: () => true,
-      update: permissions.canManageProducts,
-      delete: permissions.canManageProducts,
+      update: () => true,
+      delete: () => true,
     },
   },
   fields: {
-    image: cloudinaryImage({
-      cloudinary,
-      label: "Source",
-    }),
+    image: image({ storage: "sick_fits_local" }),
     altText: text(),
     product: relationship({
       ref: "Product.photo",

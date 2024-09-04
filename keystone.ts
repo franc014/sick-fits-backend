@@ -23,15 +23,16 @@ export default withAuth(
       },
     }, */
     db: {
-      // we're using sqlite for the fastest startup experience
-      //   for more information on what database might be appropriate for you
-      //   see https://keystonejs.com/docs/guides/choosing-a-database#title
-      provider: "sqlite",
-      url: "file:./keystone.db",
+      provider: "postgresql",
+      url: "postgresql://postgres.jufdnndawbqhhfjuknmx:YbdiS8S8eiBeUYfv@aws-0-sa-east-1.pooler.supabase.com:5432/postgres?pgbouncer=true",
+      enableLogging: true,
+      idField: { kind: "uuid" },
     },
     lists: {
       // Schema items go in here
       User,
+      Product,
+      ProductImage,
       /* CartItem,
       Order,
       Role,
@@ -50,5 +51,16 @@ export default withAuth(
       isAccessAllowed: ({ session }) => !!session?.data,
     },
     session,
+    storage: {
+      sick_fits_local: {
+        kind: "local",
+        type: "image",
+        storagePath: "public/images",
+        generateUrl: (path) => `http://localhost:3000/images${path}`,
+        serverRoute: {
+          path: "/images",
+        },
+      },
+    },
   })
 );

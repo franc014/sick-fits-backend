@@ -28,6 +28,10 @@ export const User = list({
     email: text({ validation: { isRequired: true }, isIndexed: "unique" }),
     password: password(),
     createdAt: timestamp({ defaultValue: { kind: "now" } }),
+    products: relationship({
+      ref: "Product.user",
+      many: true,
+    }),
     /* cart: relationship({
       ref: "CartItem.user",
       many: true,

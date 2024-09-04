@@ -5,10 +5,10 @@ import { rules, isSignedIn } from "../access";
 export const Product = list({
   access: {
     operation: {
-      create: isSignedIn,
-      query: rules.canReadProducts,
-      update: rules.canManageProducts,
-      delete: rules.canManageProducts,
+      create: () => true,
+      query: () => true,
+      update: () => true,
+      delete: () => true,
     },
   },
 
@@ -31,6 +31,7 @@ export const Product = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     price: integer(),
     photo: relationship({
       ref: "ProductImage.product",
@@ -41,6 +42,7 @@ export const Product = list({
         inlineEdit: { fields: ["image", "altText"] },
       },
     }),
+
     user: relationship({
       ref: "User.products",
       defaultValue: ({ context }) => ({
