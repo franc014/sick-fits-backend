@@ -10,12 +10,11 @@
   "dependencies": {
     "@graphql-tools/schema": "^10.0.6",
     "@keystone-6/auth": "^8.0.0",
+    "@keystone-6/cloudinary": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
+    "dotenv": "^16.4.5",
     "nodemailer": "^6.9.15",
     "typescript": "^5.5.0"
-  },
-  "overrides": {
-    "@keystone-6/core/next": "13.4.12"
   }
 }

@@ -51,16 +51,5 @@ export default withAuth(
       isAccessAllowed: ({ session }) => !!session?.data,
     },
     session,
-    storage: {
-      sick_fits_local: {
-        kind: "local",
-        type: "image",
-        storagePath: "public/images",
-        generateUrl: (path) => `http://localhost:3000/images${path}`,
-        serverRoute: {
-          path: "/images",
-        },
-      },
-    },
   })
 );
