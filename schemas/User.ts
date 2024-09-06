@@ -28,11 +28,8 @@ export const User = list({
     email: text({ validation: { isRequired: true }, isIndexed: "unique" }),
     password: password(),
     createdAt: timestamp({ defaultValue: { kind: "now" } }),
-    products: relationship({
-      ref: "Product.user",
-      many: true,
-    }),
-    /* cart: relationship({
+
+    cart: relationship({
       ref: "CartItem.user",
       many: true,
       ui: {
@@ -40,6 +37,7 @@ export const User = list({
         itemView: { fieldMode: "read" },
       },
     }),
+    /* 
     orders: relationship({ ref: "Order.user", many: true }),
     role: relationship({
       ref: "Role.assignedTo",

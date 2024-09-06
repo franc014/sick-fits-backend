@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { config } from "@keystone-6/core";
 
 // to keep this file tidy, we define our schema in a different file
@@ -24,7 +26,7 @@ export default withAuth(
     }, */
     db: {
       provider: "postgresql",
-      url: "postgresql://postgres.jufdnndawbqhhfjuknmx:YbdiS8S8eiBeUYfv@aws-0-sa-east-1.pooler.supabase.com:5432/postgres?pgbouncer=true",
+      url: process.env.DATABASE_URL,
       enableLogging: true,
       idField: { kind: "uuid" },
     },
@@ -33,6 +35,7 @@ export default withAuth(
       User,
       Product,
       ProductImage,
+      CartItem,
       /* CartItem,
       Order,
       Role,

@@ -43,11 +43,11 @@ export const Product = list({
       },
     }),
 
-    user: relationship({
+    /* user: relationship({
       ref: "User.products",
       defaultValue: ({ context }) => ({
         connect: { id: context.session.itemId },
       }),
-    }),
+    }), */
   },
 });

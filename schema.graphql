@@ -7,8 +7,8 @@ type User {
   email: String
   password: PasswordState
   createdAt: DateTime
-  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
-  productsCount(where: ProductWhereInput! = {}): Int
+  cart(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
+  cartCount(where: CartItemWhereInput! = {}): Int
 }
 
 type PasswordState {
@@ -31,7 +31,7 @@ input UserWhereInput {
   email: StringFilter
   password: PasswordFilter
   createdAt: DateTimeNullableFilter
-  products: ProductManyRelationFilter
+  cart: CartItemManyRelationFilter
 }
 
 input IDFilter {
@@ -94,10 +94,10 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
-input ProductManyRelationFilter {
-  every: ProductWhereInput
-  some: ProductWhereInput
-  none: ProductWhereInput
+input CartItemManyRelationFilter {
+  every: CartItemWhereInput
+  some: CartItemWhereInput
+  none: CartItemWhereInput
 }
 
 input UserOrderByInput {
@@ -117,14 +117,14 @@ input UserUpdateInput {
   email: String
   password: String
   createdAt: DateTime
-  products: ProductRelateToManyForUpdateInput
+  cart: CartItemRelateToManyForUpdateInput
 }
 
-input ProductRelateToManyForUpdateInput {
-  disconnect: [ProductWhereUniqueInput!]
-  set: [ProductWhereUniqueInput!]
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
+input CartItemRelateToManyForUpdateInput {
+  disconnect: [CartItemWhereUniqueInput!]
+  set: [CartItemWhereUniqueInput!]
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -137,12 +137,12 @@ input UserCreateInput {
   email: String
   password: String
   createdAt: DateTime
-  products: ProductRelateToManyForCreateInput
+  cart: CartItemRelateToManyForCreateInput
 }
 
-input ProductRelateToManyForCreateInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
+input CartItemRelateToManyForCreateInput {
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
 }
 
 type Product {
@@ -152,7 +152,6 @@ type Product {
   status: String
   price: Int
   photo: ProductImage
-  user: User
 }
 
 input ProductWhereUniqueInput {
@@ -169,7 +168,6 @@ input ProductWhereInput {
   status: StringNullableFilter
   price: IntNullableFilter
   photo: ProductImageWhereInput
-  user: UserWhereInput
 }
 
 input StringNullableFilter {
@@ -212,18 +210,11 @@ input ProductUpdateInput {
   status: String
   price: Int
   photo: ProductImageRelateToOneForUpdateInput
-  user: UserRelateToOneForUpdateInput
 }
 
 input ProductImageRelateToOneForUpdateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
-  disconnect: Boolean
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -238,17 +229,11 @@ input ProductCreateInput {
   status: String
   price: Int
   photo: ProductImageRelateToOneForCreateInput
-  user: UserRelateToOneForCreateInput
 }
 
 input ProductImageRelateToOneForCreateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type ProductImage {
@@ -355,6 +340,71 @@ input ProductRelateToOneForCreateInput {
   connect: ProductWhereUniqueInput
 }
 
+type CartItem {
+  id: ID!
+  quantity: Int
+  product: Product
+  user: User
+}
+
+input CartItemWhereUniqueInput {
+  id: ID
+}
+
+input CartItemWhereInput {
+  AND: [CartItemWhereInput!]
+  OR: [CartItemWhereInput!]
+  NOT: [CartItemWhereInput!]
+  id: IDFilter
+  quantity: IntFilter
+  product: ProductWhereInput
+  user: UserWhereInput
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input CartItemOrderByInput {
+  id: OrderDirection
+  quantity: OrderDirection
+}
+
+input CartItemUpdateInput {
+  quantity: Int
+  product: ProductRelateToOneForUpdateInput
+  user: UserRelateToOneForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CartItemUpdateArgs {
+  where: CartItemWhereUniqueInput!
+  data: CartItemUpdateInput!
+}
+
+input CartItemCreateInput {
+  quantity: Int
+  product: ProductRelateToOneForCreateInput
+  user: UserRelateToOneForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -379,6 +429,12 @@ type Mutation {
   updateProductImages(data: [ProductImageUpdateArgs!]!): [ProductImage]
   deleteProductImage(where: ProductImageWhereUniqueInput!): ProductImage
   deleteProductImages(where: [ProductImageWhereUniqueInput!]!): [ProductImage]
+  createCartItem(data: CartItemCreateInput!): CartItem
+  createCartItems(data: [CartItemCreateInput!]!): [CartItem]
+  updateCartItem(where: CartItemWhereUniqueInput!, data: CartItemUpdateInput!): CartItem
+  updateCartItems(data: [CartItemUpdateArgs!]!): [CartItem]
+  deleteCartItem(where: CartItemWhereUniqueInput!): CartItem
+  deleteCartItems(where: [CartItemWhereUniqueInput!]!): [CartItem]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -411,6 +467,9 @@ type Query {
   productImage(where: ProductImageWhereUniqueInput!): ProductImage
   productImages(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
   productImagesCount(where: ProductImageWhereInput! = {}): Int
+  cartItem(where: CartItemWhereUniqueInput!): CartItem
+  cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
+  cartItemsCount(where: CartItemWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
