@@ -18,12 +18,12 @@ import { ProductImage } from "./schemas/ProductImage";
 
 export default withAuth(
   config({
-    /* server: {
+    server: {
       cors: {
         origin: [process.env.FRONTEND_URL],
         credentials: true,
       },
-    }, */
+    },
     db: {
       provider: "postgresql",
       url: process.env.DATABASE_URL,
